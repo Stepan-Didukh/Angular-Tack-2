@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <STYLE>
+    .style_form {
+      padding: 0.8rem;
+      margin: 1rem;
+    }
+  </STYLE>
+</head>
+<body>
+
+<button class="style_form" (click)="Search()">Search</button>
+<input class="style_form" type='text' (input)="onInput($event)">
+{{inputCont}}
+
+<br>
+
+<div style="display: flex">
+  <button class="style_form" (click)="register()">Register</button>
+  <button class="style_form" (click)="login()">login</button>
+  <div *ngIf="statusRegister"> register</div>
+  <div *ngIf="statusLogin">login</div>
+</div>
+
+<br>
+
+<div *ngFor="let house of Houses" style="margin: 1rem">
+  Street: {{house.Street}}
+  <br>
+  Area: {{house.Area}}
+  <br>
+  Price: {{house.Price}}
+
+</div>
+
+
+</body>
+</html>
