@@ -1,44 +1,118 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <STYLE>
-    .style_form {
-      padding: 0.8rem;
-      margin: 1rem;
-    }
-  </STYLE>
-</head>
-<body>
-
 <button class="style_form" (click)="Search()">Search</button>
 <input class="style_form" type='text' (input)="onInput($event)">
 {{inputCont}}
 
 <br>
 
-<div style="display: flex">
-  <button class="style_form" (click)="register()">Register</button>
-  <button class="style_form" (click)="login()">login</button>
-  <div *ngIf="statusRegister"> register</div>
-  <div *ngIf="statusLogin">login</div>
+<div class="d-flex">
+  <button class="style_form" (click)="registerUser()">Register User</button>
+  <button class="style_form" (click)="loginUser()">login User</button>
+  <br>
+  <div *ngIf="statusRegisterUser">
+    <form (ngSubmit)="regUser()" #regForm="ngForm">
+      <input class="style_form" type="text" name="Name" placeholder="Name"
+             #nameValue="ngModel"
+             [ngStyle]="{backgroundColor: nameValue.invalid && nameValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newUser.Name">
+
+      <input class="style_form" type="text" name="Surname" placeholder="Surname"
+             #SurnameValue="ngModel"
+             [ngStyle]="{backgroundColor: SurnameValue.invalid && SurnameValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newUser.Surname">
+
+      <input class="style_form" type="text" name="Email" placeholder="Email"
+             #EmailValue="ngModel"
+             [ngStyle]="{backgroundColor: EmailValue.invalid && EmailValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newUser.Email">
+
+      <input class="style_form" type="text" name="password" placeholder="Password"
+             #passwordValue="ngModel"
+             [ngStyle]="{backgroundColor: passwordValue.invalid && passwordValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newUser.password">
+
+      <button class="style_form" [disabled]="regForm.invalid">Register</button>
+    </form>
+  </div>
+  <div *ngIf="statusLoginUser">
+    <form class="d-flex" (ngSubmit)="SingInUser()">
+      <input class="style_form" type="text" name="Name" placeholder="Name"
+             [(ngModel)]="signInUser.Name"
+             #NameValue="ngModel"
+             [ngStyle]="{backgroundColor: NameValue.invalid && NameValue.dirty ? 'red' : 'green'}">
+
+      <input class="style_form" type="text" name="password" placeholder="password"
+             [(ngModel)]="signInUser.password"
+             #Password="ngModel"
+             [ngStyle]="{backgroundColor: Password.invalid && Password.dirty ? 'red' : 'green'}">
+
+      <button class="style_form">login</button>
+      <div class="style_form" *ngIf="message">{{message}}</div>
+    </form>
+  </div>
+</div>
+
+<br>
+<div class="d-flex">
+  <button class="style_form" (click)="registerHouse()">Create new house</button>
+  <br>
+  <div *ngIf="statusRegisterHouse">
+    <form (ngSubmit)="createNewHouse()" #regFormHouse="ngForm">
+      <input class="style_form" type="text" name="Street" placeholder="Street"
+             #StreetValue="ngModel"
+             [ngStyle]="{backgroundColor: StreetValue.invalid && StreetValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newHouse.Street">
+
+      <input class="style_form" type="text" name="Area" placeholder="Area"
+             #AreaValue="ngModel"
+             [ngStyle]="{backgroundColor: AreaValue.invalid && AreaValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newHouse.Area">
+
+      <input class="style_form" type="text" name="Price" placeholder="Price"
+             #PriceValue="ngModel"
+             [ngStyle]="{backgroundColor: PriceValue.invalid && PriceValue.dirty ? 'red' : 'green'}"
+             [(ngModel)]="newHouse.Price">
+
+
+      <button class="style_form" [disabled]="regFormHouse.invalid">Create</button>
+    </form>
+  </div>
 </div>
 
 <br>
 
-<div *ngFor="let house of Houses" style="margin: 1rem">
-  Street: {{house.Street}}
-  <br>
-  Area: {{house.Area}}
-  <br>
-  Price: {{house.Price}}
-
+<div *ngFor="let h of Houses">
+  Name: {{h.Owner.Name}}
+  <div [style.color]="h.Owner.is_blocked ? 'red':'green'" >
+    <button class="style_form" (click)="showContent(this,h);"> Show full info</button>
+    <div class="content"  *ngIf="selectedIndex==h">
+      <h4>Owner</h4>
+      Name: {{h.Owner.Name}}
+      <br>
+      Surname: {{h.Owner.Surname}}
+      <br>
+      Email: {{h.Owner.Email}}
+      <h4>House</h4>
+      Street: {{h.Street}}
+      <br>
+      Area: {{h.Area}}
+      <br>
+      Price:{{h.Price}}
+    </div>
+  </div>
 </div>
 
 
-</body>
-</html>
+В минулій ДЗ у вас були будиночки, які ви ітерували
+До цих будиночків потрібно додати власника.
+Зробити масив з юзерів з стандартними полями юзера та полем is_blocked: boolean
+Тепер до будиночку додати власника, який буде один з юзерів з того масиву.
+Тепер коли ітеруєте масив будиночків відображаєте часткову інформацію про будинок. І додати кнопку show full info, яка буде відображати повну інформацію про будинок разом з власником.
+Якщо власник заблокований, то будинок обмальовувати червоним кольором.
+
+Далі зробити форму реєстраціх і логінації юзера.
+Реєструвати юзера і додавати його в масив з юзерами. Обовязково малідувати поля юзера за допомогою валідаторів форми і давати юзеру знати, яке поле заповнене не вірно. is_blocekd має бути рандомно.
+Логінація юзера. Якщо юзера з таким логіном і паролем знайдено, но видавати повідомлення Welcome. Якщо ні, то user is not found.
+
+Стоврення будиночку.
+Так само створювати як і юзера. Всі валідації мають бути присутні.
+Власника вибираємо рандомного з вже існуючих юзерів в масиві users.
